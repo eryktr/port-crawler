@@ -1,14 +1,19 @@
 from multiprocessing.dummy import Pool as ThreadPool
 import socket
+import sys
 
-PORTS = [i for i in range(0, 65535)]
+PORTS = [i for i in range(1, 65535)]
+SERVER = socket.gethostbyname(sys.argv[1])
 
-def establish_tcp_connection(server, port):
+def establish_tcp_connection(port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
-        sock.connect(server, port)
+        print(SERVER, port)
+        sock.connect((SERVER, port))
         return port
     except socket.timeout:
+        pass
+    except ConnectionRefusedError:
         pass
 
 
@@ -17,7 +22,13 @@ def main(argv):
         print("usage: python crawler.py <host> <num_of_threads>")
         exit(1)
 
-    host = socket.gethostbyname(argv[1])
-    num_threads = int(argv[3])
+    num_threads = int(argv[2])
+    pool = ThreadPool(num_threads)
+    result = pool.map(establish_tcp_connection, PORTS)
+
+    print("Open ports: ")
+    for port in result:
+        print(port)
 
 if __name__ == "__main__":
+    main(sys.argv[0:])
