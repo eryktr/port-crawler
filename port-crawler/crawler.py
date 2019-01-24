@@ -2,9 +2,10 @@ from multiprocessing.dummy import Pool as ThreadPool
 import socket
 import sys
 
+USAGE_MSG = "USAGE: python crawler.py <host> <num_of_threads>"
 
 def panic():
-    print("usage: python crawler.py <host> <num_of_threads>")
+    print(USAGE_MSG)
     exit(1)
 
 
