@@ -67,6 +67,7 @@ def main():
     def print_open_ports():
         if len(open_ports) == 0:
             print("No open ports")
+            return
 
         print("Open ports: ")
         for port in open_ports:
@@ -81,7 +82,10 @@ def main():
         except OSError:
             pass
 
-    pool.map(establish_tcp_connection, ports)
+    def scan_ports():
+        pool.map(establish_tcp_connection, ports)
+
+    scan_ports()
     print_open_ports()
 
 
