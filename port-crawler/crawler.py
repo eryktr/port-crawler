@@ -8,38 +8,36 @@ def panic():
     exit(1)
 
 
-PORTS = [i for i in range(1, 65535)]
-OPEN_PORTS = []
-
-try:
-    SERVER = socket.gethostbyname(sys.argv[1])
-    NUM_THREADS = int(sys.argv[2])
-except IndexError:
-    panic()
-
-POOL = ThreadPool(NUM_THREADS)
-
-
-def establish_tcp_connection(port):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def initialize():
     try:
-        sock.connect((SERVER, port))
-        OPEN_PORTS.append(port)
-    except OSError:
-        pass
+        server = socket.gethostbyname(sys.argv[1])
+        num_threads = int(sys.argv[2])
+        return server, num_threads
+    except IndexError:
+        panic()
 
 
-def main(argv):
-
+def main():
+    OPEN_PORTS = []
+    PORTS = [i for i in range(1, 65535)]
+    SERVER, NUM_THREADS = initialize()
+    POOL = ThreadPool(NUM_THREADS)
     def print_open_ports():
         print("Open ports: ")
         for port in OPEN_PORTS:
             print(port)
 
+    def establish_tcp_connection(port):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            sock.connect((SERVER, port))
+            OPEN_PORTS.append(port)
+        except OSError:
+            pass
+
     POOL.map(establish_tcp_connection, PORTS)
     print_open_ports()
 
 
-
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
