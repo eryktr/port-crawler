@@ -9,12 +9,11 @@ def panic():
 
 
 def initialize():
-    try:
-        server = socket.gethostbyname(sys.argv[1])
-        num_threads = int(sys.argv[2])
-        return server, num_threads
-    except IndexError:
+    if len(sys.argv) < 3:
         panic()
+    server = socket.gethostbyname(sys.argv[1])
+    num_threads = int(sys.argv[2])
+    return server, num_threads
 
 
 def main():
@@ -22,6 +21,7 @@ def main():
     PORTS = [i for i in range(1, 65535)]
     SERVER, NUM_THREADS = initialize()
     POOL = ThreadPool(NUM_THREADS)
+
     def print_open_ports():
         print("Open ports: ")
         for port in OPEN_PORTS:
