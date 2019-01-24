@@ -17,25 +17,25 @@ def initialize():
 
 
 def main():
-    OPEN_PORTS = []
-    PORTS = [i for i in range(1, 65535)]
-    SERVER, NUM_THREADS = initialize()
-    POOL = ThreadPool(NUM_THREADS)
+    open_ports = []
+    ports = [i for i in range(1, 65535)]
+    server, num_threads = initialize()
+    pool = ThreadPool(num_threads)
 
     def print_open_ports():
         print("Open ports: ")
-        for port in OPEN_PORTS:
+        for port in open_ports:
             print(port)
 
     def establish_tcp_connection(port):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            sock.connect((SERVER, port))
-            OPEN_PORTS.append(port)
+            sock.connect((server, port))
+            open_ports.append(port)
         except OSError:
             pass
 
-    POOL.map(establish_tcp_connection, PORTS)
+    pool.map(establish_tcp_connection, ports)
     print_open_ports()
 
 
