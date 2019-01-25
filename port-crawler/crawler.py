@@ -22,34 +22,30 @@ def initialize():
         upper = int(sys.argv[5])
         if lower > upper:
             lower, upper = upper, lower
-        ports = [port for port in range(lower, upper)]
-        return ports
+        return [port for port in range(lower, upper + 1)]
 
     def initialize_single():
         if len(sys.argv) < 5:
             panic()
-        ports = []
+
         for port in sys.argv[4:]:
-            ports.append(int(port))
-        return ports
+            yield int(port)
 
     def initialize_all():
         if len(sys.argv) != 4:
             panic()
-        ports = [port for port in range(1, 65535)]
-        return ports
+        return [port for port in range(1, 65535)]
 
     def initialize_ports():
         option = sys.argv[3]
         if option == ALL_OPTION:
-            ports = initialize_all()
+            return initialize_all()
         elif option == RANGE_OPTION:
-            ports = initialize_range()
+            return initialize_range()
         elif option == SINGLE_OPTION:
-            ports = initialize_single()
+            return initialize_single()
         else:
             panic()
-        return ports
 
     if len(sys.argv) < 4:
         panic()
