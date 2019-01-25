@@ -72,7 +72,6 @@ def main():
     def establish_tcp_connection(port):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            print(server, port)
             sock.connect((server, port))
             open_ports.append(port)
         except OSError:
