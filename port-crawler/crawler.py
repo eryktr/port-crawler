@@ -1,11 +1,10 @@
 from multiprocessing.dummy import Pool as ThreadPool
+from options import *
 import socket
-import sys
+from sys import argv as args
 
 USAGE_MSG = "USAGE: python crawler.py <host> <num_of_threads> <option> ... args"
-ALL_OPTION = 'a'
-SINGLE_OPTION = 's'
-RANGE_OPTION = 'r'
+
 
 
 def panic():
@@ -16,28 +15,28 @@ def panic():
 def initialize():
 
     def initialize_range():
-        if len(sys.argv) != 6:
+        if len(args) != 6:
             panic()
-        lower = int(sys.argv[4])
-        upper = int(sys.argv[5])
+        lower = int(args[4])
+        upper = int(args[5])
         if lower > upper:
             lower, upper = upper, lower
         return [port for port in range(lower, upper + 1)]
 
     def initialize_single():
-        if len(sys.argv) < 5:
+        if len(args) < 5:
             panic()
 
-        for port in sys.argv[4:]:
+        for port in args[4:]:
             yield int(port)
 
     def initialize_all():
-        if len(sys.argv) != 4:
+        if len(args) != 4:
             panic()
         return [port for port in range(1, 65535)]
 
     def initialize_ports():
-        option = sys.argv[3]
+        option = args[3]
         if option == ALL_OPTION:
             return initialize_all()
         elif option == RANGE_OPTION:
@@ -47,11 +46,11 @@ def initialize():
         else:
             panic()
 
-    if len(sys.argv) < 4:
+    if len(args) < 4:
         panic()
     ports = initialize_ports()
-    server = socket.gethostbyname(sys.argv[1])
-    num_threads = int(sys.argv[2])
+    server = socket.gethostbyname(args[1])
+    num_threads = int(args[2])
     return server, ports, num_threads
 
 
