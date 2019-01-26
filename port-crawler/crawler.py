@@ -1,9 +1,9 @@
 from multiprocessing.dummy import Pool as ThreadPool
 from options import *
+from messages import *
 import socket
 from sys import argv as args
 
-USAGE_MSG = "USAGE: python crawler.py <host> <num_of_threads> <option> ... args"
 
 
 
@@ -13,7 +13,6 @@ def panic():
 
 
 def initialize():
-
     def initialize_range():
         if len(args) != 6:
             panic()
@@ -61,10 +60,10 @@ def main():
 
     def print_open_ports():
         if len(open_ports) == 0:
-            print("No open ports")
+            print(NO_OPEN_PORTS_MSG)
             return
 
-        print("Open ports: ")
+        print(OPEN_PORTS_FOUND_MSG)
         for port in open_ports:
             print(port)
 
