@@ -60,8 +60,7 @@ def main():
             return
 
         print(OPEN_PORTS_FOUND_MSG)
-        for port in open_ports:
-            print(port)
+        print(*open_ports, sep=', ')
 
     def establish_tcp_connection(port):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
