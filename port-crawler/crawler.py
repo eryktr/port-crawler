@@ -11,9 +11,12 @@ def panic():
 
 
 def initialize():
-    def initialize_range():
-        if len(args) != 6:
+    def assert_args_length(length):
+        if len(args) < length:
             panic()
+
+    def initialize_range():
+        assert_args_length(6)
         lower = int(args[4])
         upper = int(args[5])
         if lower > upper:
@@ -21,18 +24,15 @@ def initialize():
         return [port for port in range(lower, upper + 1)]
 
     def initialize_single():
-        if len(args) < 5:
-            panic()
-
+        assert_args_length(5)
         for port in args[4:]:
             yield int(port)
 
     def initialize_all():
-        if len(args) != 4:
-            panic()
         return [port for port in range(1, 65535)]
 
     def initialize_ports():
+        assert_args_length(4)
         option = args[3]
         if option == ALL_OPTION:
             return initialize_all()
@@ -43,8 +43,6 @@ def initialize():
         else:
             panic()
 
-    if len(args) < 4:
-        panic()
     ports = initialize_ports()
     server = socket.gethostbyname(args[1])
     num_threads = int(args[2])
