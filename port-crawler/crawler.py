@@ -5,8 +5,6 @@ import socket
 from sys import argv as args
 
 
-
-
 def panic():
     print(USAGE_MSG)
     exit(1)
@@ -56,7 +54,7 @@ def initialize():
 def main():
     open_ports = []
     server, ports, num_threads = initialize()
-    pool = ThreadPool(num_threads)
+    thread_pool = ThreadPool(num_threads)
 
     def print_open_ports():
         if len(open_ports) == 0:
@@ -76,7 +74,7 @@ def main():
             pass
 
     def scan_ports():
-        pool.map(establish_tcp_connection, ports)
+        thread_pool.map(establish_tcp_connection, ports)
 
     scan_ports()
     print_open_ports()
